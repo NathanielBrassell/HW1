@@ -11,7 +11,7 @@ def home():
 @app.route("/results")
 def results():
     question = request.args.get("question")
-    print question
+    #print question
     answer = getResults.search_query(question)
     return render_template("results.html", question=question,answer=answer)
 
