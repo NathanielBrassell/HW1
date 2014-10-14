@@ -29,7 +29,7 @@ def findNames(text, content):
 
 def findDates(text, content):
     dates = {}
-    regex = "(January|February|March|April|May|June|July|August|September|October|November|December) \d{1,2}, \d{1,4}"
+    regex = "(January|February|March|April|May|June|July|August|September|October|November|December) \d{1,2}, \d{1,4}( BC| C.E.| A.D.| B.C.)?"
     for match in re.finditer(regex, text):
         addToDict(match.group(),dates)
     return findMostCommon(dates, content)
