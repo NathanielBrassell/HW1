@@ -1,4 +1,4 @@
-import re, google, urllib, Where
+import re, google, urllib
 from bs4 import BeautifulSoup, SoupStrainer
 
 
@@ -19,20 +19,35 @@ def findMostCommon(dict, content):
     #print content_words.lower()
     return most_common_key
 
-def findNames(text, content):
-    #create a dict with key=name; value=occurrences 
+def findWho(text, content):
     names = {}
     regex = "(?<!\. )[A-Z][a-z]+ ([A-Z][a-z]+ )+"
     for match in re.finditer(regex, text):
         addToDict(match.group(),names)
     return findMostCommon(names, content)
 
-def findDates(text, content):
+def findWhen(text, content):
     dates = {}
-    regex = "(January|February|March|April|May|June|July|August|September|October|November|December) \d{1,2}, \d{1,4}( BC| C.E.| A.D.| B.C.)?"
+    regex = "(January|February|March|April|May|June|July|August|September|October|November|December) \d{1,2}, \d{1,4}( BC| AD|)?"
     for match in re.finditer(regex, text):
         addToDict(match.group(),dates)
     return findMostCommon(dates, content)
+
+def findWhere(google_results, content):
+    locations=["street","alley","avenue","place","st","drive","ave","manor","house","school","tower","building","road","city","state","nation"]
+    regex="((\d{1,4}\w?) [A-Z]\w+ ([A-Z]\S+ )+)"
+    results = re.findall(regex,google_results)
+    answers={}
+    print results
+    for result in results:
+        loc=False;
+        for word in result[0].split(" "):
+            if word.lower() in locations:
+                loc=True
+        if loc:
+            addToDict(result[0],answers)
+    print answers
+    return findMostCommon(answers,content)
 
 def search_query(question):
     question_word= (question.split(" ")[0]).lower()
@@ -47,9 +62,9 @@ def search_query(question):
 
     response=""
     if question_word == "who":
-        response = findNames(search_results,content_words)
+        response = findWho(search_results,content_words)
     elif question_word == "where":
-        response = Where.where(search_results, content_words)
+        response = findWhere(search_results, content_words)
     elif question_word == "when":
-        response = findDates(search_results,content_words)
+        response = findWhen(search_results,content_words)
     return response
