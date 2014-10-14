@@ -21,7 +21,7 @@ def findMostCommon(dict, content):
 
 def findWho(text, content):
     names = {}
-    regex = "(?<!\. )[A-Z][a-z]+ ([A-Z][a-z]+ )+"
+    regex = "([A-Z]\w*|Mr.|Mrs.|Ms.|Dr|Sir.)\s([A-Z]\w*\s?)+"
     for match in re.finditer(regex, text):
         addToDict(match.group(),names)
     return findMostCommon(names, content)
@@ -52,7 +52,7 @@ def findWhere(google_results, content):
 def search_query(question):
     question_word= (question.split(" ")[0]).lower()
     content_words=" ".join(question.split(" ")[1:])
-    g= google.search(content_words, num=20, stop=20)
+    g= google.search(question, num=20, stop=20)
     search_results=""
     only_p= SoupStrainer("p")
 
