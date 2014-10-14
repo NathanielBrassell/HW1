@@ -1,22 +1,15 @@
 from bs4 import BeautifulSoup
 import re
 
-
-### to consider... ###
-# Account for UC (uppercase) words at start of sentence/start of quote,dialogue
-# Titles such as: Mr., Ms., Mrs., Dr., Judge, Uncle, Aunt, King, Queen, Captain,
-#                 Mister, Miss, Missus, Doctor, Captain, Lady, Lord, etc...
-# Implement Miranda's features
-# Change sorted dict to list or use list of tuples (string, int)
-
 def findNames(book, content_words):
     #create a dict with key=name; value=occurrences 
     names = {}
-    for match in re.finditer("(?<!\. )[A-Z][a-z]+ ([A-Z][a-z]+ )+", book):
+    regex = "(?<!\. )[A-Z][a-z]+ ([A-Z][a-z]+ )+"
+    for match in re.finditer(regex, book):
         addToDict(match.group(),names)
 
     # debugging
-    print names #debugging
+    print names
     print "len: %d" % len(names)
     most_common_name= ""
     most_common_count=0;
