@@ -1,4 +1,4 @@
-import re, google, urllib
+import re, google, urllib, Where
 from bs4 import BeautifulSoup, SoupStrainer
 
 
@@ -49,10 +49,7 @@ def search_query(question):
     if question_word == "who":
         response = findNames(search_results,content_words)
     elif question_word == "where":
-        response = "where"#where(search_results)
+        response = Where.where(search_results, content_words)
     elif question_word == "when":
         response = findDates(search_results,content_words)
     return response
-
-        
-
